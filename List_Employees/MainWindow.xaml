@@ -5,22 +5,88 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:List_Employees"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+         ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Title="MainWindow" Height="456" Width="800" Icon="/contactlist_theuser_802.ico">
+
+    <Window.Resources>
+        <local:DoubleToBoolConverter x:Key="DoubleToBoolConverter"/>
+    </Window.Resources>
+
     <Grid>
-        <ListView d:ItemsSource="{d:SampleData ItemCount=5}" Height="NaN" Margin="10,10,492,274" Width="NaN">
+        <ListView x:Name="listViewEmployees"  Height="369" Margin="10,10,10,0" Width="NaN" VerticalAlignment="Top">
+            <ListView.ItemContainerStyle>
+
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Height" Value="50"/>
+                    <Setter Property="Padding" Value="10"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="BorderBrush" Value="Gray"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" 
+                                        BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="5">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Name}"  HorizontalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Position}" HorizontalAlignment="Left">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="Black"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Path=Position}" Value="Директор">
+                                                            <Setter Property="Foreground" Value="Red" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Path=Position}" Value="Менеджер">
+                                                            <Setter Property="Foreground" Value="Blue" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <TextBlock Grid.Column="2" Text="{Binding Salary}" HorizontalAlignment="Left">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="FontWeight" Value="Normal"/>
+                                                    <Setter Property="FontStyle" Value="Normal"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Salary, Converter={StaticResource DoubleToBoolConverter}}" Value="True">
+                                                            <Setter Property="FontWeight" Value="Bold"/>
+                                                            <Setter Property="FontStyle" Value="Italic"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Grid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding Path=Position}" Value="Менеджер">
+                                        <Setter TargetName="border" Property="Background" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=Position}" Value="Розробник">
+                                        <Setter TargetName="border" Property="Background" Value="Yellow"/>
+                                    </DataTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="Ім'я" DisplayMemberBinding="{Binding Name}" Width="200"/>
+                    <GridViewColumn Header="Посада" DisplayMemberBinding="{Binding Position}" Width="200"/>
+                    <GridViewColumn Header="Оклад" DisplayMemberBinding="{Binding Salary}" Width="200"/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Label Content="Ім'я:" HorizontalAlignment="Left" Margin="43,165,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.121,0.425"/>
-        <Label Content="Посада:" HorizontalAlignment="Left" Margin="24,191,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBoxName" HorizontalAlignment="Left" Margin="81,169,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="227"/>
-        <ComboBox x:Name="comboBoxPosition" HorizontalAlignment="Left" Margin="82,191,0,0" VerticalAlignment="Top" Width="226"/>
-        <Label Content="Оклад:" HorizontalAlignment="Left" Margin="29,217,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBoxsalary" HorizontalAlignment="Left" Margin="82,221,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="226"/>
-        <Button x:Name="buttonAdd" Content="Додати" HorizontalAlignment="Left" Margin="103,252,0,0" VerticalAlignment="Top" Width="112"/>
-
     </Grid>
 </Window>
